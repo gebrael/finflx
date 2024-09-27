@@ -1,12 +1,8 @@
 import { Stack } from "expo-router";
 import React from "react";
 
-const _layout = () => {
-  return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="risk-profile" options={{ headerShown: false }} />
-    </Stack>
-  );
+const RootStackLayout = () => {
+  return <Stack screenOptions={{ headerShown: false }} />;
 };
 
-export default _layout;
+export default RootStackLayout;

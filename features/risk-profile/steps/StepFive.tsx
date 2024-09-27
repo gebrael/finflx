@@ -1,21 +1,28 @@
 import SelectBox from "@/components/SelectBox";
-import React, { useState } from "react";
+import {
+  InvestmentOutcome,
+  useInvestmentGoal,
+} from "@/providers/InvestmentGoalContext";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 const options = [
   {
     text: "Little or no ups and downs in value, lower returns",
+    value: InvestmentOutcome.LITTLE,
   },
   {
     text: "Moderate ups and downs in value, slightly higher returns",
+    value: InvestmentOutcome.MODERATE,
   },
   {
     text: "Extreme ups and downs in value, high potential returns",
+    value: InvestmentOutcome.EXTEREME,
   },
 ];
 
 const StepFive = () => {
-  const [selected, setSelected] = useState(0);
+  const { form } = useInvestmentGoal();
   return (
     <View style={styles.root}>
       <View style={styles.textContainer}>
@@ -33,9 +40,9 @@ const StepFive = () => {
           return (
             <SelectBox
               key={i}
-              active={i === selected}
+              active={form.watch("investment.outcome") === option.value}
               text={option.text}
-              onPress={() => setSelected(i)}
+              onPress={() => form.setValue("investment.outcome", option.value)}
             />
           );
         })}

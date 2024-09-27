@@ -6,9 +6,14 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { StatusBar } from "expo-status-bar";
+import { InvestmentGoalProvider } from "@/providers/InvestmentGoalContext";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 SplashScreen.preventAutoHideAsync();
 
+const queryClient = new QueryClient();
 export default function RootLayout() {
   const [loaded] = useFonts({
     PublicSansThin: require("../assets/fonts/PublicSans-Thin.ttf"),
@@ -29,14 +34,21 @@ export default function RootLayout() {
   }, [loaded]);
 
   return (
-    <ThemeProvider value={DefaultTheme}>
-      <StatusBar style="light" />
+    <QueryClientProvider client={queryClient}>
+      <GestureHandlerRootView>
+        <InvestmentGoalProvider>
+          <BottomSheetModalProvider>
+            <ThemeProvider value={DefaultTheme}>
+              <StatusBar style="light" />
 
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(stacks)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="(tabs)" />
+                <Stack.Screen name="(stacks)" />
+              </Stack>
+            </ThemeProvider>
+          </BottomSheetModalProvider>
+        </InvestmentGoalProvider>
+      </GestureHandlerRootView>
+    </QueryClientProvider>
   );
 }

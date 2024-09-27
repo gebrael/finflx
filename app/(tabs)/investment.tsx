@@ -11,7 +11,7 @@ export default function Investment() {
     router.push("/(tabs)/");
   };
   const handleStart = () => {
-    router.push("/(stacks)/investment");
+    router.push("/(stacks)");
   };
 
   return (

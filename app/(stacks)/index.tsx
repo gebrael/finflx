@@ -14,16 +14,19 @@ import StackView from "@/components/StackView";
 import Input from "@/components/textInput";
 import { Colors } from "@/constants/Colors";
 import UploadImage from "@/components/uploadImage";
+import { useInvestmentGoal } from "@/providers/InvestmentGoalContext";
+import { Controller } from "react-hook-form";
 
 const index = () => {
   const router = useRouter();
   const visible = useKeyboardVisible();
+  const { form } = useInvestmentGoal();
   const handleClose = () => {
     router.push("/(tabs)/");
   };
 
   const handleStart = () => {
-    router.push("/(stacks)/risk-profile");
+    router.push("/(stacks)/initial-amount");
   };
 
   return (
@@ -39,13 +42,26 @@ const index = () => {
             Write the name of the item or experience you’re saving for.
           </Text>
           <UploadImage />
-          <Input
-            placeholder="Goal Name"
-            placeholderTextColor={Colors.light.mainColor}
+          <Controller
+            control={form.control}
+            name="goal"
+            render={({ field }) => {
+              return (
+                <Input
+                  placeholder="Goal Name"
+                  placeholderTextColor={Colors.light.mainColor}
+                  value={field.value}
+                  onChangeText={field.onChange}
+                  onBlur={field.onBlur}
+                />
+              );
+            }}
           />
+
           <Button
             style={[styles.startButton, { marginBottom: visible ? 12 : 0 }]}
             onPress={handleStart}
+            disabled={form.watch("goal") === "" || form.watch("image") === ""}
           >
             <Text style={styles.startButtonText}>Start Now</Text>
           </Button>

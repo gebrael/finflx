@@ -4,9 +4,18 @@ import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 
 export type ButtonProps = React.ComponentProps<typeof TouchableOpacity>;
 
-export default function Button({ children, style, ...rest }: ButtonProps) {
+export default function Button({
+  children,
+  style,
+  disabled,
+  ...rest
+}: ButtonProps) {
+  let buttonStyles = [styles.button, style];
+  if (disabled) {
+    buttonStyles.push(styles.disabled);
+  }
   return (
-    <TouchableOpacity style={[styles.button, style]} {...rest}>
+    <TouchableOpacity style={buttonStyles} disabled={disabled} {...rest}>
       {children}
     </TouchableOpacity>
   );
@@ -20,5 +29,8 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     justifyContent: "center",
     alignItems: "center",
+  },
+  disabled: {
+    backgroundColor: "#E9E9E9",
   },
 });

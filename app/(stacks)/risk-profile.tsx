@@ -57,7 +57,7 @@ const RiskProfile = () => {
 
             <Pressable
               onPress={() => {
-                router.push("/(stacks)/investment");
+                router.push("/(stacks)/monthly-topup");
               }}
             >
               <Feather size={24} name="x" />
@@ -84,7 +84,7 @@ const RiskProfile = () => {
             onPress={() => {
               const newCurrentStep = currentStep + 1;
               if (newCurrentStep >= steps.length) {
-                return;
+                return router.push("/(stacks)/risk-profile-result");
               }
               setCurrentStep(newCurrentStep);
               progress.value = (newCurrentStep + 1) * (100 / steps.length);

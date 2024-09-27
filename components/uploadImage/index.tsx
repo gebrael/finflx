@@ -4,9 +4,11 @@ import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import { Colors } from "@/constants/Colors";
+import { useInvestmentGoal } from "@/providers/InvestmentGoalContext";
+
 export default function UploadImage() {
   const [image, setImage] = useState<string | null>(null);
-
+  const { form } = useInvestmentGoal();
   const pickImage = async (): Promise<void> => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -23,6 +25,7 @@ export default function UploadImage() {
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
+      form.setValue("image", result.assets[0].uri);
     }
   };
 

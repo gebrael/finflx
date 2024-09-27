@@ -1,7 +1,34 @@
-import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useRef } from "react";
+import {
+  Animated,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+} from "react-native";
 
-const StepOne = () => {
+const AnimatedMeter: React.FC = () => {
+  const rotateAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.spring(rotateAnim, {
+      toValue: -1,
+      tension: 100,
+      friction: 1,
+      useNativeDriver: true,
+    }).start();
+
+    return () => rotateAnim.stopAnimation();
+  }, []);
+
+  const rotate = rotateAnim.interpolate({
+    inputRange: [-1, 1],
+    outputRange: ["-45deg", "45deg"],
+  });
+
+  const translateY = Dimensions.get("window").width * 0.07;
+
   return (
     <View style={styles.root}>
       <View style={styles.textContainer}>
@@ -11,17 +38,31 @@ const StepOne = () => {
           suitable for you.
         </Text>
       </View>
+
       <View style={styles.imageContainer}>
         <Image
           source={require("@/assets/images/meter.png")}
           style={styles.meter}
           resizeMode="contain"
         />
-        <Image
-          source={require("@/assets/images/meterIndecator.png")}
-          style={styles.meterIndecator}
-          resizeMode="contain"
-        />
+        <Animated.View
+          style={[
+            styles.meterIndicatorContainer,
+            {
+              transform: [
+                { translateY },
+                { rotate },
+                { translateY: -translateY },
+              ],
+            },
+          ]}
+        >
+          <Image
+            source={require("@/assets/images/meterIndecator1.png")}
+            style={styles.meterIndicator}
+            resizeMode="contain"
+          />
+        </Animated.View>
         <Text style={styles.meterText}>
           Find the suitable portfolio for you
         </Text>
@@ -29,8 +70,6 @@ const StepOne = () => {
     </View>
   );
 };
-
-export default StepOne;
 
 const styles = StyleSheet.create({
   root: {
@@ -54,6 +93,7 @@ const styles = StyleSheet.create({
     color: "#202020",
     letterSpacing: 0,
   },
+
   imageContainer: {
     flex: 1,
     marginTop: -200,
@@ -63,12 +103,16 @@ const styles = StyleSheet.create({
   meter: {
     width: "100%",
   },
-  meterIndecator: {
-    width: "100%",
-    height: 65,
+  meterIndicatorContainer: {
     position: "absolute",
     bottom: "37%",
-    left: -10,
+    left: 0,
+    right: 0,
+    alignItems: "center",
+  },
+  meterIndicator: {
+    width: "100%",
+    height: 65,
   },
   meterText: {
     fontSize: 24,
@@ -78,7 +122,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0.4,
     maxWidth: "70%",
     position: "absolute",
-    bottom: "25%",
+    bottom: "20%",
     textAlign: "center",
   },
 });
+
+export default AnimatedMeter;

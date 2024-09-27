@@ -1,23 +1,31 @@
 import SelectBox from "@/components/SelectBox";
-import React, { useState } from "react";
+import {
+  InvestmentDuration,
+  useInvestmentGoal,
+} from "@/providers/InvestmentGoalContext";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 const options = [
   {
-    text: "Less than 3 years",
+    label: "Less than 3 years",
+    value: InvestmentDuration.LESS_THAN_3_YEAR,
   },
   {
-    text: "3-5 years",
+    label: "3-5 years",
+    value: InvestmentDuration.BETWEEN_3_AND_5_YEARS,
   },
   {
-    text: "6-10 years",
+    label: "6-10 years",
+    value: InvestmentDuration.BETWEEN_6_AND_10_YEARS,
   },
   {
-    text: "+11 years",
+    label: "+11 years",
+    value: InvestmentDuration.MORE_THAN_11_YEARS,
   },
 ];
 const StepTwo = () => {
-  const [selected, setSelected] = useState(0);
+  const { form } = useInvestmentGoal();
   return (
     <View style={styles.root}>
       <View style={styles.textContainer}>
@@ -35,9 +43,9 @@ const StepTwo = () => {
           return (
             <SelectBox
               key={i}
-              active={i === selected}
-              text={option.text}
-              onPress={() => setSelected(i)}
+              active={option.value === form.watch("investment.duration")}
+              text={option.label}
+              onPress={() => form.setValue("investment.duration", option.value)}
             />
           );
         })}
